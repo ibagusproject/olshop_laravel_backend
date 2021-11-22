@@ -45,15 +45,15 @@ class ProductController extends Controller
         }
 
         if ($price_from) {
-            $product->where('price', '>=', "%$price_from%");
+            $product->where('price', '>=', $price_from);
         }
 
         if ($price_to) {
-            $product->where('price', '<=', "%$price_to%");
+            $product->where('price', '<=', $price_to);
         }
 
         if ($categories) {
-            $product->where('price', "%$categories%");
+            $product->where('categories_id', $categories);
         }
 
         return ApiResponse::success($product->paginate($limit), 'Data Produk Berhasil Diambil');
@@ -81,12 +81,12 @@ class ProductController extends Controller
     public function update(Request $request)
     {
         $validate = Validator::make($request->all(), [
-            'id' => 'required|exists:product,id',
-            'name' => 'required',
-            'price' => 'required|numeric',
-            'description' => 'required',
-            'tags' => 'required',
-            'categories_id' => 'required|exists:product_categories,id',
+            'id' => 'required|exists:products,id',
+            'name' => 'string',
+            'price' => 'numeric',
+            'description' => 'string',
+            'tags' => 'string',
+            'categories_id' => 'numeric|exists:product_categories,id',
         ]);
 
         if ($validate->fails()) {
@@ -96,6 +96,6 @@ class ProductController extends Controller
         $product =  Product::find($request->id);
         $product->update($request->all());
 
-        return ApiResponse::success($product);
+        return ApiResponse::success($product, 'Produk Berhasil Diubah');
     }
 }

@@ -6,7 +6,7 @@ class ApiResponse
 {
     protected static $response = [
         'code' => 200,
-        'status' => 'success',
+        'status' => true,
         'message' => null,
         'data' => null
     ];
@@ -21,7 +21,7 @@ class ApiResponse
 
     public static function error($data = null, $message = null, $code = 400)
     {
-        self::$response['status'] = 'error';
+        self::$response['status'] = false;
         self::$response['code'] = $code;
         self::$response['message'] = $message;
         self::$response['data'] = $data;

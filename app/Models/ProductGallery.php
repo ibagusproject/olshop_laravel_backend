@@ -24,6 +24,14 @@ class ProductGallery extends Model
      */
     public function getUrlAttribute($url)
     {
-        return config('app.url') . Storage::url($url);
+        if (str_contains($url, 'http')) {
+            return $url;
+        }
+        return config('app.url') . '/assets/img/products/' . $url;
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'products_id', 'id');
     }
 }

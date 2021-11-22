@@ -124,4 +124,9 @@ class UserController extends Controller
         $token = $user->currentAccessToken()->delete();
         return ApiResponse::success($token, 'Berhasil Logout');
     }
+
+    public function all()
+    {
+        return ApiResponse::success(User::all(), 'Data User');
+    }
 }

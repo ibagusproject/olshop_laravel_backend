@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\API\ProductCategoryController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\ProductController;
 use App\Http\Controllers\API\TransactionController;
-use App\Http\Controllers\API\UserController;
-use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\API\ProductGalleryController;
+use App\Http\Controllers\API\ProductCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,13 +21,14 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('products', [ProductController::class, 'all']);
 Route::get('categories', [ProductCategoryController::class, 'all']);
+Route::get('galleries', [ProductGalleryController::class, 'all']);
 
 Route::post('register', [UserController::class, 'register']);
 Route::post('login', [UserController::class, 'login']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', [UserController::class, 'fetch']);
-    Route::patch('user', [UserController::class, 'updateProfile']);
+    Route::match(['put', 'patch'], 'user', [UserController::class, 'updateProfile']);
     Route::post('logout', [UserController::class, 'logout']);
 
     // transaction
@@ -37,10 +39,14 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // admin
     Route::middleware('is_admin')->group(function () {
+        Route::get('users', [UserController::class, 'all']);
         Route::post('products', [ProductController::class, 'store']);
-        Route::patch('products', [ProductController::class, 'update']);
+        Route::match(['put', 'patch'], 'products', [ProductController::class, 'update']);
 
         Route::post('categories', [ProductCategoryController::class, 'store']);
-        Route::patch('categories', [ProductCategoryController::class, 'update']);
+        Route::match(['put', 'patch'], 'categories', [ProductCategoryController::class, 'update']);
+
+        Route::post('galleries', [ProductGalleryController::class, 'store']);
+        Route::match(['put', 'patch'], 'galleries', [ProductGalleryController::class, 'update']);
     });
 });
